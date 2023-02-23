@@ -2,8 +2,13 @@ const { User, Book } = require("../models");
 
 const resolvers = {
   Query: {
-    user: async () => {
-      return User.find({});
+    users: async () => {
+      return await User.find({}).populate("books").populate({
+        path: "books",
+      });
+    },
+    books: async () => {
+      return await Book.find({});
     },
     books: async (parent, { _id }) => {
       const params = _id ? { _id } : {};
@@ -11,6 +16,9 @@ const resolvers = {
     },
   },
 };
+
+module.exports = resolvers;
+
 //   Mutation: {                                         // reread on Mutation
 //     createMatchup: async (parent, args) => {
 //       const matchup = await Matchup.create(args);
@@ -27,4 +35,10 @@ const resolvers = {
 //   },
 // };
 
-module.exports = resolvers;
+// },
+// books: async (parent, { _id }) => {
+//   const params = _id ? { _id } : {};
+//   return Book.find(params);
+// },
+// },
+// };
